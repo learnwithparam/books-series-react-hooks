@@ -5,15 +5,26 @@ import './App.css';
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [books, setBooks] = useState({items: []});
-  const onInputChange = (e) => {
-    setSearchTerm(e.target.value);
-  }
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   let API_URL = `https://www.googleapis.com/books/v1/volumes`;
 
   const fetchBooks = async () => {
-    const result = await axios.get(`${API_URL}?q=${searchTerm}`);
-    setBooks(result.data);
+    setLoading(true);
+    setError(false);
+    try {
+      const result = await axios.get(`${API_URL}?q=${searchTerm}`);
+      setBooks(result.data);
+    }
+    catch(error) {
+      setError(true);
+    }
+    setLoading(false);
+  }
+
+  const onInputChange = (e) => {
+    setSearchTerm(e.target.value);
   }
 
   const onSubmitHandler = (e) => {
@@ -22,6 +33,7 @@ const App = () => {
   }
 
   const bookAuthors = (authors) => {
+    if (!authors) return '';
     if (authors.length <= 2) {
       authors = authors.join(' and ')
     }
@@ -44,10 +56,17 @@ const App = () => {
             placeholder="microservice, restful design, etc.," 
             value={searchTerm}
             onChange={onInputChange}
+            required
           />
           <button type="submit">Search</button>
         </label>
+        {
+          error && <div style={{color: `red`}}>some error occurred, while fetching api</div>
+        }
       </form>
+      {
+        loading && <div style={{color: `green`}}>fetching books for "<strong>{searchTerm}</strong>"</div>
+      }
       <ul>
         {
           books.items.map((book, index) => {
