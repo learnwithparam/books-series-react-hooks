@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
+import BookSearchForm from './components/bookSearchForm';
+import Loader from './components/loader';
 import './App.css';
+import BooksList from './components/booksList';
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,61 +36,20 @@ const App = () => {
     fetchBooks();
   }
 
-  const bookAuthors = (authors) => {
-    if (!authors) return '';
-    if (authors.length <= 2) {
-      authors = authors.join(' and ')
-    }
-    else if (authors.length > 2) {
-      let lastAuthor = ' and ' + authors.slice(-1);
-      authors.pop();
-      authors = authors.join(', ');
-      authors += lastAuthor;
-    };
-    return authors;
-  }
-
   return (
-    <section>
-      <form onSubmit={onSubmitHandler}>
-        <label>
-          <span>Search for books</span>
-          <input 
-            type="search" 
-            placeholder="microservice, restful design, etc.," 
-            value={searchTerm}
-            onChange={onInputChange}
-            required
-          />
-          <button type="submit">Search</button>
-        </label>
-        {
-          error && <div style={{color: `red`}}>some error occurred, while fetching api</div>
-        }
-      </form>
-      {
-        loading && <div style={{color: `green`}}>fetching books for "<strong>{searchTerm}</strong>"</div>
-      }
-      <ul>
-        {
-          books.items.map((book, index) => {
-            return (
-              <li key={index}>
-                <div>
-                  <img alt={`${book.volumeInfo.title} book`} src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} />
-                  <div>
-                    <h3>{ book.volumeInfo.title }</h3>
-                    <p>{ bookAuthors(book.volumeInfo.authors) }</p>
-                    <p>{book.volumeInfo.publishedDate}</p>
-                  </div>
-                </div>
-                <hr />
-              </li>
-            );
-          })
-        }
-      </ul>
-    </section>
+    <>
+      <BookSearchForm 
+        onSubmitHandler={onSubmitHandler}
+        onInputChange={onInputChange}
+        searchTerm={searchTerm}
+        error={error}
+      />
+      <Loader 
+        searchTerm={searchTerm}
+        loading={loading}
+      />
+      <BooksList books={books} />
+    </>
   );
 }
 
