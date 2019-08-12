@@ -2,19 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 
+import { Container, Header } from "../components/shared";
 import BookSearchForm from "../components/bookSearchForm";
 import Loader from "../components/loader";
 import BooksList from "../components/booksList";
-
-const Header = styled.header`
-  background-color: #ffffff;
-`;
-
-const Container = styled.div`
-  max-width: 960px;
-  padding: 15px;
-  margin: 0 auto;
-`;
 
 const HeaderContainer = styled(Container)`
   display: flex;
