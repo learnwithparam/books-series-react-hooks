@@ -1,33 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import styled from "@emotion/styled";
 
 import BookSearchForm from "../components/bookSearchForm";
 import Loader from "../components/loader";
 import BooksList from "../components/booksList";
-
-const Header = styled.header`
-  background-color: #ffffff;
-`;
-
-const Container = styled.div`
-  max-width: 960px;
-  padding: 15px;
-  margin: 0 auto;
-`;
-
-const HeaderContainer = styled(Container)`
-  display: flex;
-  align-items: center;
-`;
-
-const LogoText = styled.h3`
-  margin: 0;
-`;
-
-const HeaderSearchForm = styled.div`
-  margin-left: auto;
-`;
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,19 +36,12 @@ const SearchPage = () => {
 
   return (
     <>
-      <Header>
-        <HeaderContainer>
-          <LogoText>Bookie</LogoText>
-          <HeaderSearchForm>
-            <BookSearchForm
-              onSubmitHandler={onSubmitHandler}
-              onInputChange={onInputChange}
-              searchTerm={searchTerm}
-              error={error}
-            />
-          </HeaderSearchForm>
-        </HeaderContainer>
-      </Header>
+      <BookSearchForm
+        onSubmitHandler={onSubmitHandler}
+        onInputChange={onInputChange}
+        searchTerm={searchTerm}
+        error={error}
+      />
       <Loader searchTerm={searchTerm} loading={loading} />
       <BooksList books={books} />
     </>
