@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import axios from "axios";
+import styled from "@emotion/styled";
 
+import { Container, Header } from "../components/shared";
 import BookSearchForm from "../components/bookSearchForm";
 import Loader from "../components/loader";
 import BooksList from "../components/booksList";
+
+const HeaderContainer = styled(Container)`
+  display: flex;
+  align-items: center;
+  @media (max-width: 778px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const LogoText = styled.h3`
+  margin: 0;
+`;
+
+const HeaderSearchForm = styled.div`
+  margin-left: auto;
+`;
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -36,14 +55,25 @@ const SearchPage = () => {
 
   return (
     <>
-      <BookSearchForm
-        onSubmitHandler={onSubmitHandler}
-        onInputChange={onInputChange}
-        searchTerm={searchTerm}
-        error={error}
-      />
-      <Loader searchTerm={searchTerm} loading={loading} />
-      <BooksList books={books} />
+      <Header>
+        <HeaderContainer>
+          <LogoText>Bookie</LogoText>
+          <HeaderSearchForm>
+            <BookSearchForm
+              onSubmitHandler={onSubmitHandler}
+              onInputChange={onInputChange}
+              searchTerm={searchTerm}
+              error={error}
+            />
+          </HeaderSearchForm>
+        </HeaderContainer>
+      </Header>
+      <Container>
+        <Loader loading={loading}>
+          fetching books for "<strong>{searchTerm}</strong>"
+        </Loader>
+        <BooksList books={books} />
+      </Container>
     </>
   );
 };
